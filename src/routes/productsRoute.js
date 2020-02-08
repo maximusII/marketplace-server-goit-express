@@ -3,6 +3,13 @@ let router = express.Router();
 let allProducts = require("../db/all-products.json");
 
 router.get("/*", function(req, res) {
+  if (req.url === "/") {
+    res.setHeader("Content-Type", "application/json");
+    res.send(allProducts);
+    res.end();
+    return;
+  }
+
   if (req.url.includes("?")) {
     let arrOfProducts = [];
     const ids = req.query.ids;
@@ -41,7 +48,6 @@ router.get("/*", function(req, res) {
 
   let id = req.url.slice(req.url.lastIndexOf("/") + 1);
   const findProductFromId = allProducts.find(prod => prod.id.toString() === id);
-
   if (findProductFromId) {
     res.setHeader("Content-Type", "application/json");
     res.send(findProductFromId);
